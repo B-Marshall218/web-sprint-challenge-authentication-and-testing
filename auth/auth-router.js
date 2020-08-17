@@ -17,7 +17,7 @@ router.post('/register', (req, res) => {
   if (isValid(credentials)) {
     const rounds = process.env.BCRYPT_ROUNDS || 8;
 
-    const hash = bcryptjs.hashsync(credentials.password, rounds);
+    const hash = bcryptjs.hashSync(credentials.password, rounds);
 
     credentials.password = hash;
 
@@ -42,7 +42,7 @@ router.post('/login', (req, res) => {
     Users.findBy({ username: username })
       .then(([user]) => {
         console.log("user", user)
-        if (user && bcryptjs.compreSynch(password, user.password)) {
+        if (user && bcryptjs.compareSync(password, user.password)) {
           const token = makeJwt(user)
           res.status(200).json({ message: "Welcome Chosen One", token })
         } else {
@@ -64,7 +64,7 @@ function makeJwt(user) {
     username: user.username
   };
 
-  const secret = proccess.env.JWT_SECRET || "Your secret is safe with me";
+  const secret = process.env.JWT_SECRET || "Your secret is safe with me";
 
   const options = {
     expiresIn: "1h",
